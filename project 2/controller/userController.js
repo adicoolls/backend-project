@@ -56,7 +56,7 @@ const findOneUser = async (req, res) => {
 };
 
 
-// 🔹 Login User
+//  Login User
 const loginUser = async (req, res) => {
     try {
         const { Email, Password } = req.body;
