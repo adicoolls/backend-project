@@ -42,11 +42,10 @@ const findallUser = async (req, res) => {
         const users = await User.find();
         res.json(users);
     } catch (error) {
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Server is failed there  error" });
     }
 };
-//new changes
-
+//new change
 
 // 🔹 Find One User
 const findOneUser = async (req, res) => {
