@@ -5,11 +5,17 @@ const {  CreateUser,
     findOneUser,
 loginUser,} = require("../controller/userController");
 
-const verifyToken = require("../middleware/auth");
-const { createUser } = require("../../project 1/controllers/userControllers");
+// RBAC middleware imported from auth.js
+const { verifyToken, authorizeRoles } = require("../middleware/auth");
+// NOTE: there is a stray import from project 1 earlier; removed since not used
 
-router.get("/users", verifyToken, findallUser);
+// all users can create an account via /create (role defaults to 'user')
 router.post("/create", CreateUser);
+
+// login returns a token containing the role
 router.post("/login", loginUser);
+
+// only admins may list all users
+router.get("/users", verifyToken, authorizeRoles('admin'), findallUser);
 
 module.exports = router;

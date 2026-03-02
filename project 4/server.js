@@ -9,8 +9,5 @@ app.use(express.json());
 app.get("/" ,(req, res) => {
     console.log("hello world");
 });
-
-// mount API routes under /api
-// note: RBAC is implemented inside the route definitions (see userRoutes)
 app.use("/api", routes);
 app.listen(8080, (req, res) => console.log("port is alive at 8080"));

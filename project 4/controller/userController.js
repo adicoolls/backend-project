@@ -6,25 +6,15 @@ const bcrypt = require("bcryptjs");
 // 🔹 Create User
 const CreateUser = async (req, res) => {
     try {
-        const { Name, Email, Password, role: requestedRole } = req.body;
+        const { Name, Email, Password } = req.body;
 
         // Hash password before saving
         const hashedPassword = await bcrypt.hash(Password, 10);
 
-        // By default every new signup is a normal 'user'.
-        // An admin who is already logged in could pass a role field in the body
-        // (e.g. when creating another admin user). We only honor the requested
-        // role when the token belongs to an admin.
-        let role = 'user';
-        if (requestedRole === 'admin' && req.user && req.user.role === 'admin') {
-            role = 'admin';
-        }
-
         const newUser = await User.create({
             Name,
             Email,
-            Password: hashedPassword,
-            role
+            Password: hashedPassword
         });
 
         res.status(201).json(newUser);
@@ -42,10 +32,10 @@ const findallUser = async (req, res) => {
         const users = await User.find();
         res.json(users);
     } catch (error) {
-        res.status(500).json({ message: "Server is failed there  error" });
+        res.status(500).json({ message: "Server error" });
     }
 };
-//new change
+
 
 // 🔹 Find One User
 const findOneUser = async (req, res) => {
@@ -83,9 +73,8 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: "Invalid password" });
         }
 
-        // include role in the token so middleware can make decisions later
         const token = jwt.sign(
-            { id: user._id, role: user.role },
+            { id: user._id },
             "mysecretkey",
             { expiresIn: "1h" }
         );
